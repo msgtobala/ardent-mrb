@@ -200,10 +200,10 @@ section{padding: 120px 0; position: relative;}
 ------------------------*/
 .marquee-wrap { width: 100%; position: relative; overflow: hidden; display: block; }
 .marquee-text { animation: marquee 40s linear infinite; position: relative; width: 100%; white-space: nowrap; }
-.marquee-text span { font-size: 200px; line-height: 200px; margin: 0 30px; color: var(--themeht-text-color); font-weight: 800; text-transform: uppercase; color: #fff; text-shadow: 0 13.36px 8.896px #c4b59d, 0 -2px 1px #fff; }
+.marquee-text span { font-size: 200px; line-height: 200px; margin: 0 30px; color: var(--themeht-text-color); font-weight: 800; text-transform: uppercase; color: #fff; text-shadow: 0 13.36px 8.896px #c4b59d, 0 -2px 1px #E5E5E5; }
 .marquee-text span:nth-child(2n+2) { color: var(--themeht-white-color); text-shadow: -1px -1px 0 var(--themeht-text-color), 1px -1px 0 var(--themeht-text-color), -1px 1px 0 var(--themeht-text-color), 1px 1px 0 var(--themeht-text-color); }
-.marquee-wrap:before { position: absolute; right: 0; top: 0; width: 30%; height: 100%; content: ""; z-index: 9; background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 1%, rgba(255, 255, 255, 1) 98%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c4ef17', endColorstr='#c4ef17', GradientType=1); }
-.marquee-wrap:after { position: absolute; left: 0; top: 0; width: 30%; height: 100%; content: ""; background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 99%, rgba(255, 255, 255, 0) 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c4ef17', endColorstr='#c4ef17', GradientType=1); }
+/* .marquee-wrap:before { position: absolute; right: 0; top: 0; width: 30%; height: 100%; content: ""; z-index: 9; background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 1%, rgba(255, 255, 255, 1) 98%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c4ef17', endColorstr='#c4ef17', GradientType=1); }
+.marquee-wrap:after { position: absolute; left: 0; top: 0; width: 30%; height: 100%; content: ""; background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 99%, rgba(255, 255, 255, 0) 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c4ef17', endColorstr='#c4ef17', GradientType=1); } */
 
 
 /* ------------------------
