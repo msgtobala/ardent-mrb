@@ -221,3 +221,5 @@ input,
 .breadcrumb-item a { color: var(--themeht-text-color) }
 .breadcrumb-item.active, .breadcrumb-item a:hover { color: var(--themeht-primary-color); }
 .breadcrumb-item i { background: var(--themeht-primary-color); padding: 2px 5px; border-radius: 4px; color: var(--themeht-white-color); }
+.modal-backdrop { z-index: 10001 !important; }
+.modal { z-index: 10002 !important; }

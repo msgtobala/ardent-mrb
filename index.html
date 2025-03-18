@@ -125,7 +125,7 @@
                 </li>
               </ul>
             </div>
-            <a class="themeht-btn dark-btn" href="contact.html">Download Syllabus</a>
+            <a class="themeht-btn dark-btn" href="#" data-bs-toggle="modal" data-bs-target="#syllabusModal">Download Syllabus</a>
           </nav>
         </div>
       </div>
@@ -1004,6 +1004,35 @@
 </div>
 
 <!--back-to-top end-->
+
+<!-- Download Syllabus Modal -->
+<div class="modal fade" id="syllabusModal" tabindex="-1" aria-labelledby="syllabusModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="syllabusModalLabel">Download Syllabus</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-5 py-5">
+        <form id="syllabusForm">
+          <div class="mb-3">
+            <label for="username" class="form-label">Name</label>
+            <input type="text" class="form-control" id="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" required>
+          </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="tel" class="form-control" id="phone" required>
+          </div>
+          <button type="submit" class="themeht-btn dark-btn w-100">Download Now</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
  
 <!-- inject js start -->
