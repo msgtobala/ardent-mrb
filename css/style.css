@@ -294,3 +294,5 @@ iframe { width: 100%; border: none; pointer-events: auto; }
 .form-control::-moz-placeholder { color: var(--themeht-body-color); }
 .form-control:-ms-input-placeholder { color: var(--themeht-body-color); }
 .form-control:-moz-placeholder { color: var(--themeht-body-color); }
+
+.team-name {color: var(--themeht-primary-color);}
