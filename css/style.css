@@ -199,7 +199,7 @@ section{padding: 120px 0; position: relative;}
  Marquee Text
 ------------------------*/
 .marquee-wrap { width: 100%; position: relative; overflow: hidden; display: block; }
-.marquee-text { animation: marquee 40s linear infinite; position: relative; width: 100%; white-space: nowrap; }
+.marquee-text { animation: marquee 10s linear infinite; position: relative; width: 100%; white-space: nowrap; }
 .marquee-text span { font-size: 200px; line-height: 200px; margin: 0 30px; color: var(--themeht-text-color); font-weight: 800; text-transform: uppercase; color: #fff; text-shadow: 0 13.36px 8.896px #c4b59d, 0 -2px 1px #E5E5E5; }
 .marquee-text span:nth-child(2n+2) { color: var(--themeht-white-color); text-shadow: -1px -1px 0 var(--themeht-text-color), 1px -1px 0 var(--themeht-text-color), -1px 1px 0 var(--themeht-text-color), 1px 1px 0 var(--themeht-text-color); }
 /* .marquee-wrap:before { position: absolute; right: 0; top: 0; width: 30%; height: 100%; content: ""; z-index: 9; background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 1%, rgba(255, 255, 255, 1) 98%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c4ef17', endColorstr='#c4ef17', GradientType=1); }
@@ -228,7 +228,7 @@ section{padding: 120px 0; position: relative;}
 .animated-icon-shape img:nth-child(1) { left: 6%; top: 10%; }
 .animated-icon-shape img:nth-child(2) { left: 2%; bottom: 15%; animation: small-animation2 2s infinite linear;}
 .animated-icon-shape img:nth-child(3) { right: 6%; top: 5%; animation: small-animation2 2s infinite linear;}
-.animated-icon-shape img:nth-child(4) { right: 2%; bottom: 20%; }
+.animated-icon-shape img:nth-child(4) { right: 5%; bottom: -5%; }
 .animated-icon-shape.style-2 img:nth-child(2) { left: auto; right: 2%; bottom: 20%; }
 #particles-js { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: -1; }
 .link-about { border: 1px solid var(--themeht-border-light-color); border-radius: 4px; padding: 20px 30px 20px 20px; }
