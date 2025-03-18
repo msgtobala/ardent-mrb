@@ -213,7 +213,7 @@
           <h2>connect with us <span>For Any Query</span>
           </h2>
         </div>
-          <form id="contact-form" method="post" action="php/contact.php">
+          <form id="contact-form">
           <div class="messages"></div>
           <div class="row">
             <div class="col-md-6">
@@ -240,6 +240,7 @@
               </div>
             </div>
             <div class="col-md-6">
+              <!-- Service dropdown commented out
               <div class="form-group">
                 <label>Select Service</label>
                 <select class="form-control form-select" aria-label="Default select example">
@@ -249,6 +250,7 @@
                   <option value="3">Sass</option>
                 </select>
               </div>
+              -->
             </div>
           </div>
           <div class="row">
@@ -260,7 +262,7 @@
               </div>
             </div>
             <div class="col-md-12 mt-3">
-              <button class="themeht-btn primary-btn">
+              <button type="submit" class="themeht-btn primary-btn">
                 Send Message
               </button>
             </div>
@@ -430,6 +432,8 @@
 
 <!--== jquery -->
 <script src="js/jquery.min.js"></script> 
+
+<script src="js/service/queries.js" type="module"></script>
 
 <!--== bootstrap -->
 <script src="js/bootstrap.bundle.min.js"></script>
