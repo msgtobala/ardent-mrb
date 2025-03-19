@@ -140,7 +140,7 @@ var teamswiper = new Swiper(".team-swiper", {
         speed: 1500,
         loop: true,
         autoplay: {
-        delay: 7000,
+        delay: 1000,
         disableOnInteraction: false,
       },
         pagination: {
