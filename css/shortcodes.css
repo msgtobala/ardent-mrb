@@ -44,7 +44,7 @@
 ------------------------*/
 .themeht-btn { position: relative; overflow: hidden; z-index: 9; padding: 17px 25px; display: inline-block; border-radius: 4px; border: none; color: var(--themeht-white-color); font-weight: 700; font-size: 16px; line-height: 22px; }
 .themeht-btn.primary-btn { background: var(--themeht-primary-color); color: var(--themeht-white-color); }
-.themeht-btn.secondary-btn { background: var(--themeht-secondary-color); color: var(--themeht-white-color); }
+.themeht-btn.secondary-btn { background: #4E148D; color: var(--themeht-white-color); }
 .themeht-btn.dark-btn { background: var(--themeht-bg-dark-color); color: var(--themeht-white-color); background-size: inherit; }
 
 .themeht-btn:before { content: ""; position: absolute; top: 0px; right: 0px; width: 0; height: 100%; opacity: 1; transition: 0.6s; z-index: -1; }
@@ -454,7 +454,7 @@ blockquote:after { position: absolute; top: 40px; left: 0; right: 0; font-family
 .tab .nav-tabs{border:none;}
 .tab .nav-tabs .nav-link{background: var(--themeht-white-color); border-radius: 4px; margin-right: 20px; font-size: 22px; font-weight: 500; text-transform: capitalize; color: var(--themeht-text-color); float: left; position: relative; display: inline-block; border:none; padding:15px 40px;}
 .tab .nav-tabs .nav-link:last-child{margin-right: 0;}
-.tab .nav-tabs .nav-link.active, .tab .nav-tabs .nav-link:hover, .tab .nav-tabs.active > a:focus, .tab .nav-tabs > a:hover{ background: var(--themeht-secondary-color); color: var(--themeht-white-color);}
+.tab .nav-tabs .nav-link.active, .tab .nav-tabs .nav-link:hover, .tab .nav-tabs.active > a:focus, .tab .nav-tabs > a:hover{ background: var(--themeht-primary-color); color: var(--themeht-white-color);}
 .tab .tab-content{padding: 50px 0 0;}
 
 
