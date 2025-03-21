@@ -178,10 +178,11 @@
       </div>
       <div class="col-lg-7 col-md-6 mt-5 mt-md-0 ps-lg-5">
         <div class="product-details">
-          <h3>3d Iphone</h3>
+          <h3 id="product-title">MRB Dental Course Plan</h3>
           <div class="product-price my-4">
-            <span class="product-price text-black">
-              <del>$85.00</del> $75.00 </span>
+            <span class="product-price text-black" id="product-price">
+              ₹3999.00
+            </span>
             <span class="text-theme">
               <i class="bi bi-star-fill"></i>
               <i class="bi bi-star-fill"></i>
@@ -190,21 +191,20 @@
               <i class="bi bi-star-fill"></i>
             </span>
           </div>
-          <p>Combine anything worth nothing that you can combine anything you see on our services. The possibilities are unlimited!Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+          <p id="product-description">Join our comprehensive MRB Dental exam preparation course to boost your chances of success. This plan includes study materials, practice tests, and expert guidance to help you excel in the upcoming exam.</p>
           <div class="row my-4">
             <div class="col-lg-5 col-sm-6">
-              <h6 class="mb-2 text-black">Size</h6>
+              <h6 class="mb-2 text-black">Duration</h6>
               <select class="form-control form-select">
-                <option selected>Size</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
+                <option selected>1 Month</option>
+                <option value="3m">3 Months</option>
+                <option value="6m">6 Months</option>
+                <option value="1y">1 Year</option>
               </select>
             </div>
           </div>
           <div class="product-link d-flex align-items-center mt-5">
-            <button class="themeht-btn primary-btn me-3" type="button"><span>Add To Cart</span><i class="bi bi-cart"></i></button>
+            <button class="themeht-btn primary-btn me-3" type="button" id="enroll-btn"><span>Add to Cart</span><i class="bi bi-cart-plus"></i></button>
           </div>
         </div>
       </div>
@@ -214,6 +214,60 @@
 
 <!--product end-->
 
+<!-- Plan features section -->
+<section class="pt-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h4 class="mb-4">Plan Features</h4>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Description</th>
+                <th>Availability</th>
+              </tr>
+            </thead>
+            <tbody id="plan-features">
+              <tr>
+                <td>Study Materials</td>
+                <td>Comprehensive study materials covering all MRB exam topics</td>
+                <td><i class="bi bi-check-circle-fill text-success"></i></td>
+              </tr>
+              <tr>
+                <td>Practice Tests</td>
+                <td>Regular practice tests to assess your progress</td>
+                <td><i class="bi bi-check-circle-fill text-success"></i></td>
+              </tr>
+              <tr>
+                <td>Expert Mentorship</td>
+                <td>Guidance from experienced dental professionals</td>
+                <td><i class="bi bi-check-circle-fill text-success"></i></td>
+              </tr>
+              <tr>
+                <td>Doubt Clearing Sessions</td>
+                <td>Regular sessions to clear your doubts</td>
+                <td id="doubt-clearing-feature"><i class="bi bi-check-circle-fill text-success"></i></td>
+              </tr>
+              <tr>
+                <td>Mock Exams</td>
+                <td>Full-length mock exams simulating the actual MRB exam</td>
+                <td id="mock-exam-feature"><i class="bi bi-check-circle-fill text-success"></i></td>
+              </tr>
+              <tr>
+                <td>Personalized Feedback</td>
+                <td>Individual performance analysis and improvement suggestions</td>
+                <td id="personalized-feedback-feature"><i class="bi bi-check-circle-fill text-success"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Plan features section -->
 
 <!--tab start-->
 
@@ -406,11 +460,11 @@
 
 <!--back-to-top start-->
 
-<div class="scroll-top">
+<!-- <div class="scroll-top">
   <svg class="scroll-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
     <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
   </svg>
-</div>
+</div> -->
 
 <!--back-to-top end-->
 
@@ -449,6 +503,513 @@
 
 <!--== theme-script -->
 <script src="js/theme-script.js"></script>
+
+<!-- Add JavaScript for handling plan selection before closing body tag -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const plan = urlParams.get('plan');
+    const price = urlParams.get('price');
+    const title = urlParams.get('title');
+    
+    // If plan parameter exists, update product details
+    if (plan) {
+      // Update product title
+      if (title) {
+        document.getElementById('product-title').textContent = 'MRB Dental - ' + title;
+      }
+      
+      // Update product price
+      if (price) {
+        document.getElementById('product-price').textContent = '₹' + price + '.00';
+      }
+      
+      // Update product description and features based on plan
+      switch(plan) {
+        case 'basic':
+          document.getElementById('product-description').textContent = 
+            'Our Basic Plan provides essential resources for MRB Dental exam preparation. Get access to core study materials, basic practice tests, and group mentoring sessions.';
+          document.getElementById('doubt-clearing-feature').innerHTML = '<i class="bi bi-dash-circle text-muted"></i>';
+          document.getElementById('mock-exam-feature').innerHTML = '<i class="bi bi-dash-circle text-muted"></i>';
+          document.getElementById('personalized-feedback-feature').innerHTML = '<i class="bi bi-dash-circle text-muted"></i>';
+          break;
+        
+        case 'enterprise':
+          document.getElementById('product-description').textContent = 
+            'Our most popular Enterprise Plan offers a comprehensive package with enhanced study materials, regular practice tests, expert mentorship, and personalized doubt clearing sessions.';
+          document.getElementById('mock-exam-feature').innerHTML = '<i class="bi bi-check-circle-fill text-success"></i>';
+          document.getElementById('personalized-feedback-feature').innerHTML = '<i class="bi bi-dash-circle text-muted"></i>';
+          break;
+        
+        case 'standard':
+          document.getElementById('product-description').textContent = 
+            'The Premium Standard Plan gives you complete preparation with extensive study materials, unlimited practice tests, one-on-one mentorship, personalized doubt clearing, mock exams, and detailed performance analysis.';
+          document.getElementById('mock-exam-feature').innerHTML = '<i class="bi bi-check-circle-fill text-success"></i>';
+          document.getElementById('personalized-feedback-feature').innerHTML = '<i class="bi bi-check-circle-fill text-success"></i>';
+          break;
+          
+        default:
+          // Default case if no valid plan is specified
+          break;
+      }
+      
+      // Update enroll button
+     
+    }
+  });
+</script>
+
+<!-- Add floating cart button and cart overlay before closing body tag -->
+<div class="floating-cart">
+  <button id="cart-btn" class="cart-button">
+    <i class="bi bi-cart"></i>
+    <span class="cart-count">0</span>
+  </button>
+</div>
+
+<!-- Cart Overlay -->
+<div class="cart-overlay" id="cart-overlay">
+  <div class="cart-content">
+    <div class="cart-header">
+      <h4>Your Cart</h4>
+      <button class="close-cart" id="close-cart">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="cart-items" id="cart-items">
+      <!-- Cart items will be displayed here -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total:</span>
+        <span id="cart-total-amount">₹0.00</span>
+      </div>
+      <button class="themeht-btn primary-btn w-100" id="checkout-btn">Proceed to Checkout</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add CSS for cart functionality -->
+<style>
+  /* Floating Cart Button */
+  .floating-cart {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+  }
+  
+  .cart-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--themeht-primary-color);
+    border: none;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  
+  .cart-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  }
+  
+  .cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--themeht-secondary-color);
+    color: white;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  /* Cart Overlay */
+  .cart-overlay {
+    position: fixed;
+    top: 0;
+    right: -40%;
+    width: 40%;
+    height: 100%;
+    background-color: white;
+    z-index: 9999; /* Increased z-index to appear above header */
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease-in-out;
+    overflow-y: auto;
+  }
+  
+  .cart-overlay.active {
+    right: 0;
+  }
+  
+  /* Background overlay */
+  .cart-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998; /* Increased z-index to appear above other elements but below cart */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+  }
+  
+  .cart-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .cart-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative; /* Added position relative */
+    z-index: 10000; /* Ensure cart content is above everything */
+  }
+  
+  .cart-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .cart-header h4 {
+    margin: 0;
+  }
+  
+  .close-cart {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--themeht-text-color);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+  }
+  
+  .close-cart:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .cart-items {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .cart-item {
+    display: flex;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .cart-item-image {
+    width: 80px;
+    height: 80px;
+    margin-right: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .cart-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .cart-item-details {
+    flex-grow: 1;
+  }
+  
+  .cart-item-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .cart-item-price {
+    color: var(--themeht-primary-color);
+    font-weight: bold;
+  }
+  
+  .cart-item-remove {
+    color: #999;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  .cart-footer {
+    padding: 20px;
+    border-top: 1px solid #eee;
+  }
+  
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+  
+  /* Responsive adjustments for smaller screens */
+  @media (max-width: 768px) {
+    .cart-overlay {
+      width: 100%;
+      right: -100%;
+    }
+  }
+  
+  /* Ensure cart notification appears above everything */
+  .cart-notification {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    background-color: var(--themeht-primary-color);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 10001;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+</style>
+
+<!-- Add a backdrop div for the cart overlay -->
+<div class="cart-backdrop" id="cart-backdrop"></div>
+
+<!-- Add JavaScript for cart functionality before closing body tag -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const addToCartBtn = document.getElementById('enroll-btn');
+    const cartBtn = document.getElementById('cart-btn');
+    const cartOverlay = document.getElementById('cart-overlay');
+    const cartBackdrop = document.getElementById('cart-backdrop');
+    const closeCartBtn = document.getElementById('close-cart');
+    const cartItems = document.getElementById('cart-items');
+    const cartCountElement = document.querySelector('.cart-count');
+    const cartTotalElement = document.getElementById('cart-total-amount');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    
+    // Change enroll button text to "Add to Cart"
+    if (addToCartBtn) {
+      addToCartBtn.innerHTML = '<span>Add to Cart</span><i class="bi bi-cart-plus"></i>';
+    }
+    
+    // Initialize cart from session storage
+    let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    updateCartCount();
+    
+    // Add to Cart button click handler
+    if (addToCartBtn) {
+      addToCartBtn.addEventListener('click', function() {
+        // Get product details from the page
+        const urlParams = new URLSearchParams(window.location.search);
+        const plan = urlParams.get('plan') || 'basic';
+        const price = urlParams.get('price') || '3999';
+        const title = urlParams.get('title') || 'Basic Plan';
+        
+        // Create product object
+        const product = {
+          id: Date.now().toString(), // Unique ID
+          plan: plan,
+          title: title,
+          price: parseFloat(price),
+          image: 'images/product/01.jpg'
+        };
+        
+        // Add to cart
+        const existingProductIndex = cart.findIndex(item => item.plan === product.plan);
+        if(existingProductIndex==-1){
+          showNotification(`${title} added to cart!`);
+        }
+        addToCart(product);
+        // Show success message
+      });
+    }
+    
+    // Cart button click handler
+    cartBtn.addEventListener('click', function() {
+      openCart();
+    });
+    
+    // Close cart button click handler
+    closeCartBtn.addEventListener('click', function() {
+      closeCart();
+    });
+    
+    // Checkout button click handler
+    checkoutBtn.addEventListener('click', function() {
+      if (cart.length === 0) {
+        alert('Your cart is empty');
+      } else {
+        alert('Proceeding to checkout with your selected items!');
+        // Here you would redirect to checkout page
+      }
+    });
+    
+    // Function to add product to cart
+    function addToCart(product) {
+      // Check if product already exists in cart (by plan)
+      const existingProductIndex = cart.findIndex(item => item.plan === product.plan);
+      
+      if (existingProductIndex >= 0) {
+        // Product already exists, show notification
+        showNotification(`${product.title} is already in your cart!`);
+      } else {
+        // Add new product to cart
+        cart.push(product);
+        
+        // Save to session storage
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+        
+        // Update cart count
+        updateCartCount();
+      }
+    }
+    
+    // Function to remove product from cart
+    function removeFromCart(productId) {
+      cart = cart.filter(item => item.id !== productId);
+      sessionStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      renderCartItems();
+    }
+    
+    // Function to update cart count badge
+    function updateCartCount() {
+      cartCountElement.textContent = cart.length;
+    }
+    
+    // Function to open cart overlay
+    function openCart() {
+      renderCartItems();
+      cartOverlay.classList.add('active');
+      cartBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+    }
+    
+    // Function to close cart overlay
+    function closeCart() {
+      cartOverlay.classList.remove('active');
+      cartBackdrop.classList.remove('active');
+      document.body.style.overflow = ''; // Restore scrolling
+    }
+    
+    // Function to render cart items
+    function renderCartItems() {
+      cartItems.innerHTML = '';
+      
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p class="text-center my-5">Your cart is empty</p>';
+        cartTotalElement.textContent = '₹0.00';
+        return;
+      }
+      
+      let total = 0;
+      
+      cart.forEach(item => {
+        total += item.price;
+        
+        const cartItemElement = document.createElement('div');
+        cartItemElement.className = 'cart-item';
+        cartItemElement.innerHTML = `
+          <div class="cart-item-image">
+            <img src="${item.image}" alt="${item.title}">
+          </div>
+          <div class="cart-item-details">
+            <div class="cart-item-title">${item.title}</div>
+            <div class="cart-item-price">₹${item.price.toFixed(2)}</div>
+          </div>
+          <button class="cart-item-remove" data-id="${item.id}">
+            <i class="bi bi-trash"></i>
+          </button>
+        `;
+        
+        cartItems.appendChild(cartItemElement);
+      });
+      
+      // Add event listeners to remove buttons
+      document.querySelectorAll('.cart-item-remove').forEach(button => {
+        button.addEventListener('click', function() {
+          const productId = this.getAttribute('data-id');
+          removeFromCart(productId);
+        });
+      });
+      
+      // Update total
+      cartTotalElement.textContent = `₹${total.toFixed(2)}`;
+    }
+    
+    // Function to show notification
+    function showNotification(message) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = 'cart-notification';
+      notification.textContent = message;
+      
+      // No longer need to set these styles inline since we defined them in the CSS
+      document.body.appendChild(notification);
+      
+      // Show notification
+      setTimeout(() => {
+        notification.style.opacity = '1';
+        notification.style.transform = 'translateY(0)';
+      }, 10);
+      
+      // Hide and remove notification after 3 seconds
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+    
+    // Click on backdrop to close cart
+    cartBackdrop.addEventListener('click', function() {
+      closeCart();
+    });
+    
+    // Click outside to close cart (can be removed since we have the backdrop now)
+    document.addEventListener('click', function(event) {
+      if (cartOverlay.classList.contains('active') && 
+          !cartOverlay.contains(event.target) && 
+          !cartBtn.contains(event.target)) {
+        closeCart();
+      }
+    });
+  });
+</script>
 
 <!-- inject js end -->
 
