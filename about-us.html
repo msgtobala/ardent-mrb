@@ -834,6 +834,7 @@
           </div>
           <div class="modal-body px-5 py-5">
             <form id="syllabusForm">
+              <div class="syllabus-messages"></div>
               <div class="mb-3">
                 <label for="username" class="form-label">Name</label>
                 <input
@@ -842,14 +843,17 @@
                   id="username"
                   required
                 />
+                <div class="help-block with-errors"></div>
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" required />
+                <div class="help-block with-errors"></div>
               </div>
               <div class="mb-3">
                 <label for="phone" class="form-label">Phone Number</label>
                 <input type="tel" class="form-control" id="phone" required />
+                <div class="help-block with-errors"></div>
               </div>
               <button type="submit" class="themeht-btn dark-btn w-100">
                 Download Now
@@ -897,5 +901,8 @@
     <script src="js/theme-script.js"></script>
 
     <!-- inject js end -->
+
+    <script src="js/config/firebase.js" type="module"></script>
+    <script src="js/service/queries.js" type="module"></script>
   </body>
 </html>
