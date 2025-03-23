@@ -239,12 +239,12 @@
                     <div class="col-lg-5 col-sm-6">
                       <h6 class="mb-2 text-black">Course</h6>
                       <select class="form-control form-select">
-                        <option selected>Select Course</option>
-                        <option value="S">Ultimate Online Prep</option>
-                        <option value="S">Ultimate Test Series</option>
-                        <option value="M">Tamil Eligibility Course</option>
-                        <option value="L">Achiever’s Offline Course</option>
-                        <option value="XL">Smart Hybrid Coaching</option>
+                        <option value="">Select Course</option>
+                        <option value="2">Ultimate Online Prep</option>
+                        <option value="1">Ultimate Test Series</option>
+                        <option value="3">Tamil Eligibility Course</option>
+                        <option value="4">Achiever's Offline Course</option>
+                        <option value="5">Smart Hybrid Coaching</option>
                       </select>
                     </div>
                   </div>
@@ -284,40 +284,57 @@
                   </nav>
                   <!-- Tab panes -->
                   <div class="tab-content p-0 pt-5">
-                    <div role="tabpanel" class="tab-pane fade show active" id="tab3-2">
-                      <h5 class="mb-3">Additional information</h5>
-                      <table class="table table-bordered mb-0">
-                        <tbody>
-                          <tr>
-                            <td>Size</td>
-                            <td>Small, Medium, Large & Extra Large</td>
-                          </tr>
-                          <tr>
-                            <td>Color</td>
-                            <td>Black, Green, Blue</td>
-                          </tr>
-                          <tr>
-                            <td>Chest</td>
-                            <td>38 inches</td>
-                          </tr>
-                          <tr>
-                            <td>Waist</td>
-                            <td>20 cm</td>
-                          </tr>
-                          <tr>
-                            <td>Length</td>
-                            <td>35 cm</td>
-                          </tr>
-                          <tr>
-                            <td>Fabric</td>
-                            <td>Cotton, Silk & Synthetic</td>
-                          </tr>
-                          <tr>
-                            <td>Warranty</td>
-                            <td>6 Months</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                    <div
+                      role="tabpanel"
+                      class="tab-pane fade show active"
+                      id="tab3-2"
+                    >
+                      <h5 class="mb-3">Course Information</h5>
+                      <div class="price-list price-list-special">
+                        <h6 class="price-product-title">Dental Subjects</h6>
+                        <ul class="list-unstyled mb-0">
+                          <li>
+                            <i class="flaticon flaticon-check-1"></i>
+                            Live + Prerecorded Classes
+                          </li>
+                          <li>
+                            <i class="flaticon flaticon-check-1"></i>
+                            Question Bank
+                          </li>
+                          <li>
+                            <i class="flaticon flaticon-check-1"></i>
+                            Test Series
+                          </li>
+                          <li>
+                            <i class="flaticon flaticon-check-1"></i>
+                            Doubt Clearing Sessions
+                          </li>
+                        </ul>
+                        <h6
+                          class="price-product-title"
+                          style="margin-top: 20px"
+                        >
+                          Tamil Eligibility
+                        </h6>
+                        <ul class="list-unstyled mb-0">
+                          <li>
+                            <i class="flaticon flaticon-check-1"></i>
+                            Tamil Eligibility Videos
+                          </li>
+                          <li>
+                            <i class="flaticon flaticon-check-1"></i>
+                            Question Bank
+                          </li>
+                          <li>
+                            <i class="flaticon flaticon-check-1"></i>
+                            Test Series
+                          </li>
+                          <li>
+                            <i class="flaticon flaticon-check-1"></i>
+                            Doubt Clearing Sessions
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -542,5 +559,98 @@
     <script src="js/theme-script.js"></script>
 
     <!-- inject js end -->
+
+    <script src="js/config/products.js"></script>
+
+    <script>
+    // Get course data
+    const products = [
+      {
+        id: 1,
+        name: 'Ultimate Test Series',
+        price: 4555,
+        desc: 'Ace Your Exams with Precision!',
+        dentalSubjects: [
+          'Daily MRB Pattern Subject Tests',
+          'Master Leaderboard Tests',
+        ],
+        tamilEligibility: ['Tamil Eligibility Tests', 'Previous Year Questions'],
+      },
+      // ... other products ...
+    ];
+
+    function updateProductDetails(product) {
+      // Update product name
+      document.querySelector('.product-details h3').textContent = product.name;
+      
+      // Update price
+      document.querySelector('.product-price .product-price').textContent = `₹${product.price.toFixed(2)}`;
+      
+      // Update description
+      document.querySelector('.product-details p').textContent = product.desc;
+      
+      // Update additional information
+      const dentalList = document.querySelector('#tab3-2 .price-list ul:first-of-type');
+      const tamilList = document.querySelector('#tab3-2 .price-list ul:last-of-type');
+      
+      // Clear existing lists
+      dentalList.innerHTML = '';
+      tamilList.innerHTML = '';
+      
+      // Add dental subjects
+      if (product.dentalSubjects) {
+        product.dentalSubjects.forEach(item => {
+          dentalList.innerHTML += `
+            <li>
+              <i class="flaticon flaticon-check-1"></i>
+              ${item}
+            </li>
+          `;
+        });
+      }
+      
+      // Add Tamil eligibility items
+      if (product.tamilEligibility) {
+        product.tamilEligibility.forEach(item => {
+          tamilList.innerHTML += `
+            <li>
+              <i class="flaticon flaticon-check-1"></i>
+              ${item}
+            </li>
+          `;
+        });
+      }
+    }
+
+    // When page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get the course ID from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const courseId = parseInt(urlParams.get('course'));
+      
+      if (courseId) {
+        // Find the select element
+        const courseSelect = document.querySelector('select.form-control');
+        
+        // Set the selected option
+        courseSelect.value = courseId;
+        
+        // Find the product
+        const product = products.find(p => p.id === courseId);
+        if (product) {
+          updateProductDetails(product);
+        }
+      }
+      
+      // Add change event listener to select
+      document.querySelector('select.form-control').addEventListener('change', function(e) {
+        const selectedId = parseInt(e.target.value);
+        const product = products.find(p => p.id === selectedId);
+        if (product) {
+          updateProductDetails(product);
+        }
+      });
+    });
+    </script>
   </body>
 </html>
