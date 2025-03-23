@@ -1,0 +1,70 @@
+const products = [
+  {
+    id: 1,
+    name: 'Ultimate Test Series',
+    price: 4555,
+    desc: 'Ace Your Exams with Precision!',
+    dentalSubjects: [
+      'Daily MRB Pattern Subject Tests',
+      'Master Leaderboard Tests',
+    ],
+    tamilEligibility: ['Tamil Eligibility Tests', 'Previous Year Questions'],
+  },
+  {
+    id: 2,
+    name: 'Ultimate Online Prep',
+    price: 7999,
+    desc: 'Unlock Your Success from Anywhere!',
+    dentalSubjects: [
+      'Live + Prerecorded Classes',
+      'Question Bank',
+      'Test Series',
+      'Doubt Clearing Sessions',
+    ],
+    tamilEligibility: [
+      'Tamil Eligibility Videos',
+      'Question Bank',
+      'Test Series',
+      'Doubt Clearing Sessions',
+    ],
+  },
+  {
+    id: 3,
+    name: 'Tamil Eligibility Course',
+    price: 3555,
+    desc: 'Master Tamil Eligibility with Ease!',
+    tamilEligibility: [
+      'Tamil Eligibility Videos',
+      'Tamil Eligibility Question Bank',
+      'Tamil Eligibility Test Series',
+      'Doubt Clearing Sessions',
+    ],
+  },
+  {
+    id: 4,
+    name: 'Achiever’s Offline Course',
+    price: 9999,
+    desc: 'Master Your Success, On-Site!',
+    dentalSubjects: [
+      'Interactive Classes – 6 Days/Week',
+      'Complete Offline Course',
+      'Group Discussion',
+      'Access to Study Center',
+      'Hard Copy Study Materials',
+      'Daily Targets',
+    ],
+  },
+  {
+    id: 5,
+    name: 'Smart Hybrid Coaching',
+    price: 8999,
+    desc: 'The Perfect Blend of Online & Offline Learning!',
+    dentalSubjects: [
+      'Online Classes – 5 Days/Week',
+      'Offline Classes – 1 Days/Week',
+      'Group Discussion',
+      'Study Center Access',
+      'Hard Copy Study Materials',
+    ],
+  },
+];
