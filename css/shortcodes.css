@@ -395,6 +395,8 @@ blockquote:after { position: absolute; top: 40px; left: 0; right: 0; font-family
 .price-list li i { color: var(--themeht-primary-color); line-height: 20px; font-size: 20px; margin-right: 10px }
 .price-table.price-active .price-title { background: linear-gradient(90deg, #0944c3, #667eea); }
 .price-table .themeht-btn { width: 100%; text-align: center; }
+.price-list-special { border-bottom: 1px solid #d1e0ff; padding-bottom: 40px; }
+.price-product-title { font-size: 20px; margin-bottom: 10px; }
 
 
 /* ------------------------
