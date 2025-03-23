@@ -389,7 +389,7 @@ blockquote:after { position: absolute; top: 40px; left: 0; right: 0; font-family
 .price-value h2 { font-size: 60px; line-height: 60px; font-weight: 700; color: var(--themeht-white-color); margin-bottom: 0; position: relative; display: inline-block; }
 .price-value span { color: var(--themeht-white-color); }
 .price-value h2 sup { font-size: 26px; line-height: 24px; margin: 0; font-weight: normal; }
-.price-list { border-top: 1px solid #d1e0ff; padding-top: 40px; margin-top: 40px; margin-bottom: 40px }
+.price-list {  margin-top: 20px; margin-bottom: 20px }
 .price-list ul li { position: relative; display: flex; margin-bottom: 15px; align-items: center; }
 .price-list ul li:last-child { margin-bottom: 0; }
 .price-list li i { color: var(--themeht-primary-color); line-height: 20px; font-size: 20px; margin-right: 10px }
@@ -458,6 +458,22 @@ blockquote:after { position: absolute; top: 40px; left: 0; right: 0; font-family
 .tab .nav-tabs .nav-link:last-child{margin-right: 0;}
 .tab .nav-tabs .nav-link.active, .tab .nav-tabs .nav-link:hover, .tab .nav-tabs.active > a:focus, .tab .nav-tabs > a:hover{ background: var(--themeht-primary-color); color: var(--themeht-white-color);}
 .tab .tab-content{padding: 50px 0 0;}
+.tab-pane-custom {
+    padding-top: 50px !important;
+}
+
+@media screen and (max-width: 767px) {
+    .tab .nav-tabs .nav-link {
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+
+    .tab-pane-custom {
+        padding-top: 5px !important;
+    }
+}
+
+
 
 
 /* ------------------------

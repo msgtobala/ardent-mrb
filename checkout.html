@@ -61,6 +61,8 @@
 
 <!-- inject css end -->
 
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://checkout.razorpay.com https://api.razorpay.com; script-src 'self' 'unsafe-inline' https://checkout.razorpay.com; frame-src 'self' https://api.razorpay.com;">
+
 </head>
 
 <body>
@@ -279,30 +281,18 @@
           <h5 class="mb-3 text-theme">Payment Method</h5>
           <div class="form-group">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="customRadio1">
-              <label class="form-check-label" for="customRadio1">Direct Bank Tranfer</label>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="customRadio2">
-              <label class="form-check-label" for="customRadio2">Check Payment</label>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="customRadio3">
-              <label class="form-check-label" for="customRadio3">Paypal Account</label>
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="razorpay" checked>
+              <label class="form-check-label" for="razorpay">Pay with Razorpay</label>
             </div>
           </div>
           <div class="form-group mb-0">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-              <label class="form-check-label" for="flexCheckDefault">I have read and accept the terms and conditions</label>
+              <input class="form-check-input" type="checkbox" value="" id="termsCheck" required>
+              <label class="form-check-label" for="termsCheck">I have read and accept the terms and conditions</label>
             </div>
           </div>
         </div>
-        <button class="themeht-btn primary-btn">Proceed to Payment</button>
+        <button class="themeht-btn primary-btn" id="rzp-button">Proceed to Payment</button>
       </div>
     </div>
   </div>
@@ -483,6 +473,48 @@
 <script src="js/theme-script.js"></script>
 
 <!-- inject js end -->
+
+<script>
+function loadRazorpay(callback) {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = callback;
+    script.onerror = function() {
+        alert('Failed to load payment gateway. Please disable your ad-blocker or try a different browser.');
+    };
+    document.body.appendChild(script);
+}
+
+document.getElementById('rzp-button').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+        alert('Please fill all required fields');
+        return;
+    }
+
+    if (!document.getElementById('termsCheck').checked) {
+        alert('Please accept the terms and conditions');
+        return;
+    }
+
+    loadRazorpay(function() {
+        // Rest of your Razorpay initialization code here
+        // ... (same as above)
+    });
+});
+
+function validateForm() {
+    const requiredFields = ['fname', 'lname', 'email', 'phone', 'address'];
+    for (let field of requiredFields) {
+        if (!document.getElementById(field).value) {
+            return false;
+        }
+    }
+    return true;
+}
+</script>
 
 </body>
 

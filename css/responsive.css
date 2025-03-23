@@ -76,7 +76,7 @@
     .header .themeht-btn { display: none; }
     .banner p { max-width: inherit; }
     .banner-1 .banner-img .img1 { left: 0; }
-    .banner { padding: 200px 0 120px; }
+    .banner { padding: 50px 0 120px; padding-bottom: 50px; }
     .banner.banner-2 { padding: 150px 0 100px; }
     .feature-sec .featured-item.style-3 { margin-left: 0 !important; margin-right: 0 !important; }
     .featured-item.style-3 { display: block; }
