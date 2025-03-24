@@ -297,3 +297,17 @@ iframe { width: 100%; border: none; pointer-events: auto; }
 .form-control:-moz-placeholder { color: var(--themeht-body-color); }
 
 .team-name {color: var(--themeht-primary-color);}
+
+@media only screen and (max-width: 768px) {
+  .hide-image {
+    display: none;
+  }
+
+  .choose-us-content {
+    margin-top: 0 !important;
+  }
+
+  .counter-desc {
+    text-align: center !important;
+  }
+}

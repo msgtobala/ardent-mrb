@@ -272,7 +272,7 @@ blockquote:after { position: absolute; top: 40px; left: 0; right: 0; font-family
 .featured-item.style-4 .featured-icon { margin-bottom: 20px; display: inline-block; color: var(--themeht-primary-color); font-size: 50px; }
 .featured-item.style-4:hover .featured-icon { color: var(--themeht-secondary-color) }
 
-.featured-item.style-5 { padding: 50px; border-radius: 24px; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.featured-item.style-5 { padding: 20px 30px; border-radius: 24px; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 .featured-item.style-5 .featured-icon { margin-bottom: 30px; }
 .featured-item.style-5 .featured-icon i { background: linear-gradient(90deg, var(--themeht-primary-color)  20%, var(--themeht-secondary-color) 100%); background-clip: border-box; -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; font-size: 70px; }
 .featured-item.style-5 .featured-icon img { width: 80px; }
