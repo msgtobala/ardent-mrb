@@ -3,7 +3,7 @@
  */
 
 // Razorpay test key
-const razorpayKeyId = "rzp_live_08tMX4Iwv9nZAB";
+const razorpayKeyId = "rzp_live_sLZejTW2vk9WnN";
 
 // API endpoints
 const API_BASE_URL =
