@@ -61,7 +61,31 @@
 
 <!-- inject css end -->
 
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://checkout.razorpay.com https://api.razorpay.com; script-src 'self' 'unsafe-inline' https://checkout.razorpay.com; frame-src 'self' https://api.razorpay.com;">
+<style>
+  .form-error {
+    font-size: 0.85rem;
+    margin-top: -0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .is-invalid {
+    border-color: #dc3545 !important;
+  }
+  
+  .coupon-message {
+    font-size: 0.85rem;
+  }
+  
+  /* Payment status modal styles */
+  #paymentStatusModal .modal-body {
+    padding: 2rem;
+  }
+  
+  #paymentStatusModal .modal-footer {
+    border-top: none;
+    padding-top: 0;
+  }
+</style>
 
 </head>
 
@@ -174,8 +198,17 @@
 <section>
   <div class="container">
     <div class="row">
+      <div class="col-12 mb-5" id="error-message" style="display: none;">
+        <div class="alert alert-danger text-center" role="alert">
+          <!-- Error message will be inserted here -->
+        </div>
+        <div class="text-center mt-4">
+          <a href="index.html#pricing" class="themeht-btn primary-btn">View Our Courses</a>
+        </div>
+      </div>
+      
       <div class="col-lg-8 col-md-12">
-        <div class="checkout-form box-shadow white-bg rounded p-5">
+        <div class="checkout-form box-shadow white-bg rounded p-5" id="checkout-form">
           <h2 class="mb-4">Billing Details</h2>
           <form class="row">
             <div class="col-md-6">
@@ -193,41 +226,19 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label>E-mail Address</label>
-                <input type="text" id="email" class="form-control" placeholder="State Province">
+                <input type="text" id="email" class="form-control" placeholder="Email">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label>Phone Number</label>
-                <input type="text" id="phone" class="form-control" placeholder="">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>Company Name</label>
-                <input type="text" id="companyname" class="form-control" placeholder="Company Name">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>Select Country</label>
-                <select class="form-control form-select">
-                  <option value="#">Select country</option>
-                  <option value="#">Alaska</option>
-                  <option value="#">China</option>
-                  <option value="#">Japan</option>
-                  <option value="#">Korea</option>
-                  <option value="#">Philippines</option>
-                </select>
+                <input type="text" id="phone" class="form-control" placeholder="Phone">
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group">
                 <label>Address</label>
                 <input type="text" id="address" class="form-control" placeholder="Enter Your Address">
-              </div>
-              <div class="form-group">
-                <input type="text" id="address2" class="form-control" placeholder="Second Address">
               </div>
             </div>
             <div class="col-md-12">
@@ -267,32 +278,12 @@
           </div>
         </div>
         <div>
-          <h5 class="mb-3 text-theme">Your Order</h5>
-          <ul class="list-unstyled">
-            <li class="mb-3 border-bottom border-light pb-3"><span> 1 x Product Name </span> $ 2404.00</li>
-            <li class="mb-3 border-bottom border-light pb-3"><span> 1 x Product Name </span> $ 498.00</li>
-            <li class="mb-3 border-bottom border-light pb-3"><span> Shipping </span> $ 0.00</li>
-            <li class="mb-3 border-bottom border-light pb-3"><span> Subtotal </span> $ 2830.00</li>
-            <li class="text-black"><span><strong class="cart-total"> Total :</strong></span>  <strong class="cart-total">$ 2830.00 </strong>
-            </li>
+          <h5 class="mb-3 text-theme">Your Order - <span id="product-title">Course Details</span></h5>
+          <ul class="list-unstyled" id="order-details">
+            <!-- Product details will be loaded here -->
           </ul>
         </div>
-        <div class="cart-detail my-5">
-          <h5 class="mb-3 text-theme">Payment Method</h5>
-          <div class="form-group">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="razorpay" checked>
-              <label class="form-check-label" for="razorpay">Pay with Razorpay</label>
-            </div>
-          </div>
-          <div class="form-group mb-0">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="termsCheck" required>
-              <label class="form-check-label" for="termsCheck">I have read and accept the terms and conditions</label>
-            </div>
-          </div>
-        </div>
-        <button class="themeht-btn primary-btn" id="rzp-button">Proceed to Payment</button>
+        <button class="themeht-btn primary-btn" id="proceed-payment">Proceed to Payment</button>
       </div>
     </div>
   </div>
@@ -436,6 +427,8 @@
 
 <!--back-to-top end-->
 
+<!-- Razorpay SDK -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
  
 <!-- inject js start -->
 
@@ -471,6 +464,15 @@
 
 <!--== theme-script -->
 <script src="js/theme-script.js"></script>
+
+<!-- Add product data -->
+<script src="js/config/products.js"></script>
+
+<!-- Add payment handler -->
+<script src="js/payment-handler.js"></script>
+
+<!-- Add checkout script -->
+<script src="js/checkout.js"></script>
 
 <!-- inject js end -->
 
