@@ -1,15 +1,15 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function () {
   // Extract product ID from URL parameters
   const urlParams = new URLSearchParams(window.location.search);
-  const productId = urlParams.get("id");
+  const productId = urlParams.get('id');
 
   // Get product information container
-  const orderDetailsContainer = document.getElementById("order-details");
-  const errorMessageContainer = document.getElementById("error-message");
-  const checkoutForm = document.getElementById("checkout-form");
-  const productTitleElement = document.getElementById("product-title");
-  const proceedToPaymentBtn = document.getElementById("proceed-payment");
-  const formFields = document.querySelectorAll(".form-control");
+  const orderDetailsContainer = document.getElementById('order-details');
+  const errorMessageContainer = document.getElementById('error-message');
+  const checkoutForm = document.getElementById('checkout-form');
+  const productTitleElement = document.getElementById('product-title');
+  const proceedToPaymentBtn = document.getElementById('proceed-payment');
+  const formFields = document.querySelectorAll('.form-control');
 
   // Store the selected product globally
   let selectedProduct = null;
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // If no product ID is provided
   if (!productId) {
     handleError(
-      "No product selected. Please choose a product from our offerings."
+      'No product selected. Please choose a product from our offerings.'
     );
     return;
   }
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // If product not found
   if (!selectedProduct) {
     handleError(
-      "Invalid product selection. Please choose a valid product from our offerings."
+      'Invalid product selection. Please choose a valid product from our offerings.'
     );
     return;
   }
@@ -41,17 +41,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Ensure the form is visible
   if (checkoutForm) {
-    checkoutForm.style.display = "block";
+    checkoutForm.style.display = 'block';
   }
 
   // Add event listeners for form field validation
   if (formFields) {
     formFields.forEach((field) => {
-      field.addEventListener("blur", function () {
+      field.addEventListener('blur', function () {
         validateField(this);
       });
 
-      field.addEventListener("input", function () {
+      field.addEventListener('input', function () {
         // Clear error when user starts typing
         clearFieldError(this);
       });
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Add event listener to proceed to payment button
   if (proceedToPaymentBtn) {
-    proceedToPaymentBtn.addEventListener("click", function (e) {
+    proceedToPaymentBtn.addEventListener('click', async function (e) {
       e.preventDefault();
 
       // Validate all fields before proceeding
@@ -70,20 +70,74 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Process payment for the selected product
         if (window.PaymentHandler && selectedProduct) {
-          window.PaymentHandler.processPayment(selectedProduct, customerInfo);
+          try {
+            const response = await window.PaymentHandler.processPayment(
+              selectedProduct,
+              customerInfo
+            );
+            // If payment is successful
+            if (response.razorpay_payment_id) {
+              try {
+                // Prepare the order data
+                const orderData = {
+                  paymentId: response.razorpay_payment_id,
+                  orderId: response.razorpay_order_id,
+                  signature: response.razorpay_signature,
+                  customerInfo: {
+                    firstName: customerInfo.firstName,
+                    lastName: customerInfo.lastName,
+                    email: customerInfo.email,
+                    phone: customerInfo.phone,
+                    address: customerInfo.address,
+                    city: customerInfo.city,
+                    state: customerInfo.state,
+                    zipCode: customerInfo.zipCode,
+                  },
+                  productDetails: {
+                    id: selectedProduct.id,
+                    name: selectedProduct.name,
+                    price: selectedProduct.price,
+                  },
+                  timestamp: new Date().toISOString(),
+                  status: 'completed',
+                };
+
+                // Store in Firestore
+                const docRef = await addDoc(
+                  collection(db, 'orders'),
+                  orderData
+                );
+                console.log('Order stored with ID:', docRef.id);
+
+                // Show success message
+                alert('Payment successful! Your order has been confirmed.');
+
+                // Redirect to success page
+                window.location.href = '/order-complete.html';
+              } catch (error) {
+                console.error('Error storing order details:', error);
+                alert(
+                  'Payment successful! However, there was an issue storing your order details. Please contact support with your payment ID: ' +
+                    response.razorpay_payment_id
+                );
+              }
+            }
+          } catch (e) {
+            console.log(e);
+          }
         } else {
-          console.error("Payment handler not found or no product selected");
-          alert("Unable to process payment. Please try again later.");
+          console.error('Payment handler not found or no product selected');
+          alert('Unable to process payment. Please try again later.');
         }
       }
     });
   }
 
   // Handle apply coupon button
-  const applyCouponBtn = document.getElementById("button-addon2");
+  const applyCouponBtn = document.getElementById('button-addon2');
   if (applyCouponBtn) {
-    applyCouponBtn.addEventListener("click", function () {
-      const couponCode = document.getElementById("c-code").value.trim();
+    applyCouponBtn.addEventListener('click', function () {
+      const couponCode = document.getElementById('c-code').value.trim();
 
       if (couponCode) {
         // Show processing message
@@ -94,17 +148,17 @@ document.addEventListener("DOMContentLoaded", function () {
         // Simulate API call to apply coupon
         setTimeout(() => {
           // Reset button
-          this.innerHTML = "Apply";
+          this.innerHTML = 'Apply';
           this.disabled = false;
 
           // For demo purposes, show a message that coupon is invalid
           showCouponMessage(
-            "Invalid coupon code. Please try another one.",
-            "danger"
+            'Invalid coupon code. Please try another one.',
+            'danger'
           );
         }, 1500);
       } else {
-        showCouponMessage("Please enter a coupon code", "warning");
+        showCouponMessage('Please enter a coupon code', 'warning');
       }
     });
   }
@@ -112,18 +166,18 @@ document.addEventListener("DOMContentLoaded", function () {
   // Function to show coupon message
   function showCouponMessage(message, type) {
     // Remove existing message if any
-    const existingMsg = document.querySelector(".coupon-message");
+    const existingMsg = document.querySelector('.coupon-message');
     if (existingMsg) {
       existingMsg.remove();
     }
 
     // Create new message
     const msgHTML = `<div class="coupon-message alert alert-${type} mt-2">${message}</div>`;
-    document.getElementById("c-code").insertAdjacentHTML("afterend", msgHTML);
+    document.getElementById('c-code').insertAdjacentHTML('afterend', msgHTML);
 
     // Auto remove after 5 seconds
     setTimeout(() => {
-      const msg = document.querySelector(".coupon-message");
+      const msg = document.querySelector('.coupon-message');
       if (msg) {
         msg.remove();
       }
@@ -134,15 +188,15 @@ document.addEventListener("DOMContentLoaded", function () {
   function handleError(message) {
     if (errorMessageContainer) {
       errorMessageContainer.textContent = message;
-      errorMessageContainer.style.display = "block";
+      errorMessageContainer.style.display = 'block';
     }
 
     if (orderDetailsContainer) {
-      orderDetailsContainer.style.display = "none";
+      orderDetailsContainer.style.display = 'none';
     }
 
     if (checkoutForm) {
-      checkoutForm.style.display = "none";
+      checkoutForm.style.display = 'none';
     }
   }
 
@@ -156,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Clear existing content
-    orderDetailsContainer.innerHTML = "";
+    orderDetailsContainer.innerHTML = '';
 
     // Create the order details HTML
     let html = `
@@ -183,69 +237,69 @@ document.addEventListener("DOMContentLoaded", function () {
     const fieldId = field.id;
     const value = field.value.trim();
     let isValid = true;
-    let errorMessage = "";
+    let errorMessage = '';
 
     // Clear previous error
     clearFieldError(field);
 
     // Validate based on field ID
     switch (fieldId) {
-      case "fname":
-      case "lname":
+      case 'fname':
+      case 'lname':
         if (!value) {
           isValid = false;
-          errorMessage = "This field is required";
+          errorMessage = 'This field is required';
         }
         break;
 
-      case "email":
+      case 'email':
         if (!value) {
           isValid = false;
-          errorMessage = "Email is required";
+          errorMessage = 'Email is required';
         } else if (!isValidEmail(value)) {
           isValid = false;
-          errorMessage = "Please enter a valid email address";
+          errorMessage = 'Please enter a valid email address';
         }
         break;
 
-      case "phone":
+      case 'phone':
         if (!value) {
           isValid = false;
-          errorMessage = "Phone number is required";
+          errorMessage = 'Phone number is required';
         } else if (!isValidPhone(value)) {
           isValid = false;
-          errorMessage = "Please enter a valid 10-digit phone number";
+          errorMessage = 'Please enter a valid 10-digit phone number';
         }
         break;
 
-      case "address":
+      case 'address':
         if (!value) {
           isValid = false;
-          errorMessage = "Address is required";
+          errorMessage = 'Address is required';
         }
         break;
 
-      case "towncity":
+      case 'towncity':
         if (!value) {
           isValid = false;
-          errorMessage = "City is required";
+          errorMessage = 'City is required';
         }
         break;
 
-      case "statename":
+      case 'statename':
         if (!value) {
           isValid = false;
-          errorMessage = "State is required";
+          errorMessage = 'State is required';
         }
         break;
 
-      case "zippostalcode":
+      case 'zippostalcode':
         if (!value) {
           isValid = false;
-          errorMessage = "Postal code is required";
+          errorMessage = 'Postal code is required';
         } else if (!isValidZipCode(value)) {
           isValid = false;
-          errorMessage = "Please enter a valid postal code";
+          errorMessage = 'Please enter a valid postal code';
         }
         break;
     }
@@ -276,43 +330,44 @@ document.addEventListener("DOMContentLoaded", function () {
   function displayFieldError(field, message) {
     // Find or create error element
     let errorElement = field.nextElementSibling;
-    if (!errorElement || !errorElement.classList.contains("form-error")) {
-      errorElement = document.createElement("div");
-      errorElement.className = "form-error text-danger mt-1";
-      field.insertAdjacentElement("afterend", errorElement);
+    if (!errorElement || !errorElement.classList.contains('form-error')) {
+      errorElement = document.createElement('div');
+      errorElement.className = 'form-error text-danger mt-1';
+      field.insertAdjacentElement('afterend', errorElement);
     }
 
     // Set error message
     errorElement.textContent = message;
 
     // Add error class to input
-    field.classList.add("is-invalid");
+    field.classList.add('is-invalid');
   }
 
   // Function to clear field error
   function clearFieldError(field) {
     // Remove error message if it exists
     const errorElement = field.nextElementSibling;
-    if (errorElement && errorElement.classList.contains("form-error")) {
+    if (errorElement && errorElement.classList.contains('form-error')) {
       errorElement.remove();
     }
 
     // Remove error class from input
-    field.classList.remove("is-invalid");
+    field.classList.remove('is-invalid');
   }
 
   // Function to collect customer information
   function collectCustomerInfo() {
     return {
-      name: `${document.getElementById("fname").value.trim()} ${document
-        .getElementById("lname")
+      firstName: `${document.getElementById('fname').value.trim()} ${document
+        .getElementById('lname')
         .value.trim()}`,
-      email: document.getElementById("email").value.trim(),
-      phone: document.getElementById("phone").value.trim(),
-      address: document.getElementById("address").value.trim(),
-      city: document.getElementById("towncity").value.trim(),
-      state: document.getElementById("statename").value.trim(),
-      zipCode: document.getElementById("zippostalcode").value.trim(),
+      lastName: document.getElementById('lname').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      address: document.getElementById('address').value.trim(),
+      city: document.getElementById('towncity').value.trim(),
+      state: document.getElementById('statename').value.trim(),
+      zipCode: document.getElementById('zippostalcode').value.trim(),
     };
   }
 
@@ -325,13 +380,13 @@ document.addEventListener("DOMContentLoaded", function () {
   // Helper function to validate phone number (10 digits)
   function isValidPhone(phone) {
     const phoneRegex = /^\d{10}$/;
-    return phoneRegex.test(phone.replace(/[\s-]/g, ""));
+    return phoneRegex.test(phone.replace(/[\s-]/g, ''));
   }
 
   // Helper function to validate zip/postal code
   function isValidZipCode(zipCode) {
     // Basic validation for 6-digit Indian postal code
     const zipRegex = /^\d{6}$/;
-    return zipRegex.test(zipCode.replace(/\s/g, ""));
+    return zipRegex.test(zipCode.replace(/\s/g, ''));
   }
 });
