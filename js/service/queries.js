@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Submit to Firebase
       try {
-        await submitQuery(name, email, phone, message);
+        await submitSyllabusQuery(name, email, phone, message);
         // Reset form on success
         syllabusForm.reset();
 
@@ -116,27 +116,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function submitQuery(name, email, phone, message) {
   try {
-    const docRef = doc(db, 'user-queries', phone);
-
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      console.log('Document already exists with phone: ', phone);
-      return phone;
-    }
-
-    await setDoc(docRef, {
+    const docRef = await addDoc(collection(db, "user-queries"), {
       name: name,
       email: email,
       phone: phone,
       message: message,
       timestamp: serverTimestamp(),
+      status: 'pending',
     });
 
     console.log('Query submitted with ID: ', phone);
-    return phone;
+    return docRef.id;
   } catch (error) {
     console.error('Error submitting query: ', error);
+    throw error;
+  }
+}
+
+async function submitSyllabusQuery(name, email, phone, message) {
+  try {
+    const docRef = await addDoc(collection(db, "syllabus-queries"), {
+      name: name,
+      email: email,
+      phone: phone,
+      message: message,
+      timestamp: serverTimestamp(),
+      status: 'pending',
+    });
+
+    console.log("Query submitted with ID: ", docRef.id);
+    return docRef.id;
+  } catch (error) {
+    console.error('Error submitting syllabus query: ', error);
     throw error;
   }
 }

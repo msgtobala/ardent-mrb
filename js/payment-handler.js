@@ -2,9 +2,13 @@
  * Payment handler for Razorpay integration
  */
 import {
+  doc,
   collection,
   addDoc,
+  setDoc,
+  getDoc,
   serverTimestamp,
+  arrayUnion,
 } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
 import { db } from './config/firebase.js';
 
@@ -32,7 +36,6 @@ async function initializePayment(product, customerInfo) {
 
     // Hide loading state
     showProcessingOverlay(false);
-    console.log(product.price);
 
     // Configure Razorpay options
     const options = {
@@ -140,7 +143,10 @@ async function handlePaymentSuccess(response, product, customerInfo) {
         timestamp: serverTimestamp(),
         status: 'success',
       };
+      // Generate a unique ID for the registration
+      const registrationId = doc(collection(db, 'registrations')).id;
       const registrationData = {
+        registrationId: registrationId,
         orderId: response.razorpay_order_id,
         paymentId: response.razorpay_payment_id,
         name: customerInfo.name,
@@ -150,11 +156,42 @@ async function handlePaymentSuccess(response, product, customerInfo) {
         city: customerInfo.city,
         product: product.name,
         productId: product.id,
+        price: product.price,
         timestamp: serverTimestamp(),
         status: 'pending',
       };
-      await addDoc(collection(db, 'orders'), orderData);
-      await addDoc(collection(db, 'registrations'), registrationData);
+      await setDoc(doc(db, 'orders', response.razorpay_order_id), orderData);
+      await setDoc(doc(db, 'registrations', registrationId), registrationData);
+      // Add course to user's registered courses
+      const userRef = doc(db, 'users', customerInfo.email);
+      
+      // Get existing user doc or create new one
+      const userDoc = await getDoc(userRef);
+      
+      if (userDoc.exists()) {
+        // User exists, update their courses array
+        await setDoc(userRef, {
+          courses: arrayUnion({
+            courseId: product.id,
+            courseName: product.name,
+            registrationId: registrationId,
+            status: 'active'
+          })
+        }, { merge: true });
+      } else {
+        // Create new user document
+        await setDoc(userRef, {
+          email: customerInfo.email,
+          name: customerInfo.name,
+          phone: customerInfo.phone,
+          courses: [{
+            courseId: product.id, 
+            courseName: product.name,
+            registrationId: registrationId,
+            status: 'active'
+          }]
+        });
+      }
       showPaymentStatus(
         'success',
         'Payment Successful!',
