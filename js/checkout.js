@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Add event listener to proceed to payment button
   if (proceedToPaymentBtn) {
-    proceedToPaymentBtn.addEventListener('click', async function (e) {
+    proceedToPaymentBtn.addEventListener('click', function (e) {
       e.preventDefault();
 
       // Validate all fields before proceeding
@@ -71,57 +71,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // Process payment for the selected product
         if (window.PaymentHandler && selectedProduct) {
           try {
-            const response = await window.PaymentHandler.processPayment(
+             window.PaymentHandler.processPayment(
               selectedProduct,
               customerInfo
             );
-            // If payment is successful
-            if (response.razorpay_payment_id) {
-              try {
-                // Prepare the order data
-                const orderData = {
-                  paymentId: response.razorpay_payment_id,
-                  orderId: response.razorpay_order_id,
-                  signature: response.razorpay_signature,
-                  customerInfo: {
-                    firstName: customerInfo.firstName,
-                    lastName: customerInfo.lastName,
-                    email: customerInfo.email,
-                    phone: customerInfo.phone,
-                    address: customerInfo.address,
-                    city: customerInfo.city,
-                    state: customerInfo.state,
-                    zipCode: customerInfo.zipCode,
-                  },
-                  productDetails: {
-                    id: selectedProduct.id,
-                    name: selectedProduct.name,
-                    price: selectedProduct.price,
-                  },
-                  timestamp: new Date().toISOString(),
-                  status: 'completed',
-                };
-
-                // Store in Firestore
-                const docRef = await addDoc(
-                  collection(db, 'orders'),
-                  orderData
-                );
-                console.log('Order stored with ID:', docRef.id);
-
-                // Show success message
-                alert('Payment successful! Your order has been confirmed.');
-
-                // Redirect to success page
-                window.location.href = '/order-complete.html';
-              } catch (error) {
-                console.error('Error storing order details:', error);
-                alert(
-                  'Payment successful! However, there was an issue storing your order details. Please contact support with your payment ID: ' +
-                    response.razorpay_payment_id
-                );
-              }
-            }
           } catch (e) {
             console.log(e);
           }

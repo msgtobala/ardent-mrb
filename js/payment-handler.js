@@ -1,43 +1,49 @@
 /**
  * Payment handler for Razorpay integration
  */
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
+import { db } from './config/firebase.js';
 
 // Razorpay test key
-const razorpayKeyId = "rzp_live_sLZejTW2vk9WnN";
+const razorpayKeyId = 'rzp_live_sLZejTW2vk9WnN';
 
 // API endpoints
 const API_BASE_URL =
-  "https://us-central1-mrb-ardent-mds.cloudfunctions.net/api"; // Replace with your actual API URL
-const CREATE_ORDER_ENDPOINT = "/create-order";
-const VERIFY_PAYMENT_ENDPOINT = "/verify-payment";
+  'https://us-central1-mrb-ardent-mds.cloudfunctions.net/api'; // Replace with your actual API URL
+const CREATE_ORDER_ENDPOINT = '/create-order';
+const VERIFY_PAYMENT_ENDPOINT = '/verify-payment';
 
 // Initialize the payment process
 async function initializePayment(product, customerInfo) {
   try {
     // Show loading state
-    showProcessingOverlay(true, "Creating your order...");
+    showProcessingOverlay(true, 'Creating your order...');
 
     // Create order via API
-    const orderData = await createOrder(1);
+    const orderData = await createOrder(product.price);
 
     if (!orderData || !orderData.order || !orderData.order.id) {
-      throw new Error("Failed to create order. Please try again.");
+      throw new Error('Failed to create order. Please try again.');
     }
 
     // Hide loading state
     showProcessingOverlay(false);
+    console.log(product.price);
 
     // Configure Razorpay options
     const options = {
       key: razorpayKeyId,
-      amount: 1 * 100, // Amount in smallest currency unit (paise for INR)
-      currency: "INR",
-      name: "Ardent MDS",
+      amount: product.price * 100, // Amount in smallest currency unit (paise for INR)
+      currency: 'INR',
+      name: 'Ardent MDS',
       description: `Payment for ${product.name}`,
-      image: "images/ardent-logo.png",
+      image: 'images/ardent-logo.png',
       order_id: orderData.order.id,
       handler: function (response) {
-        // This function runs when payment is successful
         handlePaymentSuccess(response, product, customerInfo);
       },
       prefill: {
@@ -51,13 +57,13 @@ async function initializePayment(product, customerInfo) {
         customerDetails: JSON.stringify(customerInfo),
       },
       theme: {
-        color: "#1360ef", // Match the theme color of the website
+        color: '#1360ef', // Match the theme color of the website
       },
       modal: {
         ondismiss: function () {
           showPaymentStatus(
-            "warning",
-            "Payment Cancelled",
+            'warning',
+            'Payment Cancelled',
             "You've cancelled the payment process. Your order has not been placed."
           );
         },
@@ -71,17 +77,17 @@ async function initializePayment(product, customerInfo) {
     razorpayInstance.open();
 
     // Handle payment failure
-    razorpayInstance.on("payment.failed", function (response) {
-      handlePaymentFailure(response);
+    razorpayInstance.on('payment.failed', function (response) {
+      handlePaymentFailure(response, customerInfo, product);
     });
 
     return razorpayInstance;
   } catch (error) {
-    console.error("Payment initialization error:", error);
+    console.error('Payment initialization error:', error);
     showProcessingOverlay(false);
     showPaymentStatus(
-      "error",
-      "Payment Setup Failed",
+      'error',
+      'Payment Setup Failed',
       `We couldn't set up your payment: ${error.message}. Please try again later.`
     );
     return null;
@@ -92,9 +98,9 @@ async function initializePayment(product, customerInfo) {
 async function createOrder(amount) {
   try {
     const response = await fetch(`${API_BASE_URL}${CREATE_ORDER_ENDPOINT}`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         amount: amount,
@@ -107,7 +113,7 @@ async function createOrder(amount) {
 
     return await response.json();
   } catch (error) {
-    console.error("Error creating order:", error);
+    console.error('Error creating order:', error);
     throw error;
   }
 }
@@ -115,7 +121,7 @@ async function createOrder(amount) {
 // Handle successful payment
 async function handlePaymentSuccess(response, product, customerInfo) {
   try {
-    showProcessingOverlay(true, "Verifying your payment...");
+    showProcessingOverlay(true, 'Verifying your payment...');
 
     // Verify payment with backend
     const verificationResult = await verifyPayment(response);
@@ -126,35 +132,58 @@ async function handlePaymentSuccess(response, product, customerInfo) {
     // Handle verification result
     if (verificationResult && verificationResult.success) {
       // Payment verified successfully
+      const orderData = {
+        orderId: response.razorpay_order_id,
+        paymentId: response.razorpay_payment_id,
+        customerInfo: customerInfo,
+        productDetails: product,
+        timestamp: serverTimestamp(),
+        status: 'success',
+      };
+      const registrationData = {
+        orderId: response.razorpay_order_id,
+        paymentId: response.razorpay_payment_id,
+        name: customerInfo.name,
+        email: customerInfo.email,
+        phone: customerInfo.phone,
+        address: customerInfo.address,
+        city: customerInfo.city,
+        product: product.name,
+        productId: product.id,
+        timestamp: serverTimestamp(),
+        status: 'pending',
+      };
+      await addDoc(collection(db, 'orders'), orderData);
+      await addDoc(collection(db, 'registrations'), registrationData);
       showPaymentStatus(
-        "success",
-        "Payment Successful!",
+        'success',
+        'Payment Successful!',
         `Your payment for ${
           product.name
         } has been processed successfully. Your order number is ${
-          response.razorpay_order_id || "N/A"
+          response.razorpay_order_id || 'N/A'
         }. You will receive a confirmation email shortly.`,
         function () {
           // Redirect to success page or dashboard
           window.location.href =
-            "payment-success.html?order=" +
-            (response.razorpay_order_id || "unknown");
+            'payment-success.html?order=' +
+            (response.razorpay_order_id || 'unknown');
         }
       );
     } else {
       // Payment verification failed
       showPaymentStatus(
-        "error",
-        "Payment Verification Failed",
+        'error',
+        'Payment Verification Failed',
         "We've received your payment, but we couldn't verify it. Please contact our support team with your payment details."
       );
     }
   } catch (error) {
     showProcessingOverlay(false);
-    console.error("Payment verification error:", error);
+    console.error('Payment verification error:', error);
     showPaymentStatus(
-      "error",
-      "Payment Verification Error",
+      'error',
+      'Payment Verification Error',
       "We've encountered an error while verifying your payment. Please contact our support team."
     );
   }
@@ -164,9 +193,9 @@ async function handlePaymentSuccess(response, product, customerInfo) {
 async function verifyPayment(res) {
   try {
     const response = await fetch(`${API_BASE_URL}${VERIFY_PAYMENT_ENDPOINT}`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(res),
     });
@@ -177,29 +206,41 @@ async function verifyPayment(res) {
 
     return await response.json();
   } catch (error) {
-    console.error("Error verifying payment:", error);
+    console.error('Error verifying payment:', error);
     throw error;
   }
 }
 
 // Handle payment failure
-function handlePaymentFailure(response) {
-  console.error("Payment failed:", response);
+async function handlePaymentFailure(response, customerInfo, product) {
+  console.error('Payment failed:', response);
+
+  const failedPaymentData = {
+    orderId: response.razorpay_order_id ?? '',
+    paymentId: response.razorpay_payment_id ?? '',
+    errorCode: response.error.code ?? '',
+    errorMessage: response.error.description ?? '',
+    customerInfo,
+    productDetails: product,
+    timestamp: serverTimestamp(),
+    status: 'failed',
+  };
+  await addDoc(collection(db, 'orders'), failedPaymentData);
 
   // Show failure message
   showPaymentStatus(
-    "error",
-    "Payment Failed",
+    'error',
+    'Payment Failed',
     `Your payment could not be processed. Error: ${
-      response.error.description || "Unknown error"
+      response.error.description || 'Unknown error'
     }. Please try again or use a different payment method.`
   );
 }
 
 // Show processing overlay
-function showProcessingOverlay(show, message = "Processing...") {
+function showProcessingOverlay(show, message = 'Processing...') {
   // Remove existing overlay if any
-  const existingOverlay = document.getElementById("processing-overlay");
+  const existingOverlay = document.getElementById('processing-overlay');
   if (existingOverlay) {
     existingOverlay.remove();
   }
@@ -215,7 +256,7 @@ function showProcessingOverlay(show, message = "Processing...") {
       </div>
     `;
 
-    document.body.insertAdjacentHTML("beforeend", overlayHtml);
+    document.body.insertAdjacentHTML('beforeend', overlayHtml);
   }
 }
 
@@ -224,15 +265,15 @@ function showPaymentStatus(status, title, message, onClose = null) {
   // Status can be: success, error, warning
   const statusColors = {
     success: {
-      header: "bg-success",
+      header: 'bg-success',
       icon: '<i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>',
     },
     error: {
-      header: "bg-danger",
+      header: 'bg-danger',
       icon: '<i class="bi bi-x-circle-fill text-danger" style="font-size: 4rem;"></i>',
     },
     warning: {
-      header: "bg-warning",
+      header: 'bg-warning',
       icon: '<i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 4rem;"></i>',
     },
   };
@@ -256,9 +297,9 @@ function showPaymentStatus(status, title, message, onClose = null) {
               </div>
               <div class="modal-footer justify-content-center">
                   <button type="button" class="themeht-btn ${
-                    status === "success" ? "primary-btn" : "outline-btn"
+                    status === 'success' ? 'primary-btn' : 'outline-btn'
                   }" data-bs-dismiss="modal">
-                      ${status === "success" ? "Continue" : "Close"}
+                      ${status === 'success' ? 'Continue' : 'Close'}
                   </button>
               </div>
           </div>
@@ -267,20 +308,20 @@ function showPaymentStatus(status, title, message, onClose = null) {
   `;
 
   // Add modal to the document
-  document.body.insertAdjacentHTML("beforeend", modalHtml);
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
 
   // Initialize and show the modal
-  const modalElement = document.getElementById("paymentStatusModal");
+  const modalElement = document.getElementById('paymentStatusModal');
   const modal = new bootstrap.Modal(modalElement);
   modal.show();
 
   // Handle custom close action if provided
   if (onClose) {
-    modalElement.addEventListener("hidden.bs.modal", onClose);
+    modalElement.addEventListener('hidden.bs.modal', onClose);
   }
 
   // Remove modal from DOM when hidden
-  modalElement.addEventListener("hidden.bs.modal", function () {
+  modalElement.addEventListener('hidden.bs.modal', function () {
     this.remove();
   });
 }
@@ -288,41 +329,41 @@ function showPaymentStatus(status, title, message, onClose = null) {
 // Validate customer information
 function validateCustomerInfo() {
   // Get form fields
-  const fname = document.getElementById("fname").value.trim();
-  const lname = document.getElementById("lname").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const address = document.getElementById("address").value.trim();
-  const city = document.getElementById("towncity").value.trim();
+  const fname = document.getElementById('fname').value.trim();
+  const lname = document.getElementById('lname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const address = document.getElementById('address').value.trim();
+  const city = document.getElementById('towncity').value.trim();
 
   // Basic validation
   if (!fname) {
-    alert("Please enter your first name");
+    alert('Please enter your first name');
     return null;
   }
 
   if (!lname) {
-    alert("Please enter your last name");
+    alert('Please enter your last name');
     return null;
   }
 
   if (!email || !isValidEmail(email)) {
-    alert("Please enter a valid email address");
+    alert('Please enter a valid email address');
     return null;
   }
 
   if (!phone || !isValidPhone(phone)) {
-    alert("Please enter a valid phone number");
+    alert('Please enter a valid phone number');
     return null;
   }
 
   if (!address) {
-    alert("Please enter your address");
+    alert('Please enter your address');
     return null;
   }
 
   if (!city) {
-    alert("Please enter your city");
+    alert('Please enter your city');
     return null;
   }
 
@@ -343,7 +384,7 @@ function isValidEmail(email) {
 
 // Phone validation helper
 function isValidPhone(phone) {
-  return /^\d{10}$/.test(phone.replace(/[\s-]/g, ""));
+  return /^\d{10}$/.test(phone.replace(/[\s-]/g, ''));
 }
 
 // Export functions
